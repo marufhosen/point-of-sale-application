@@ -24,7 +24,9 @@ const Login = () => {
   const [newUser, setNewUser] = useState(false);
   const [userInfo, setUserInfo] = useState({});
 
-  const [loggedInuser, setLoggedInUser] = useContext(userContext);
+  // const [loggedInuser, setLoggedInUser] = useContext(userContext);
+  const { user } = useContext(userContext);
+  const [loggedInuser, setLoggedInUser] = user;
 
   let navigate = useNavigate();
   let location = useLocation();

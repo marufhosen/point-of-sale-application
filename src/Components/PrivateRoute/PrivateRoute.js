@@ -3,7 +3,9 @@ import { Navigate, useLocation } from "react-router-dom";
 import { userContext } from "../../App";
 
 const PrivateRoute = ({ children, ...rest }) => {
-  const [loggedInuser, setLoggedInUser] = useContext(userContext);
+  // const [loggedInuser, setLoggedInUser] = useContext(userContext);
+  const { user } = useContext(userContext);
+  const [loggedInuser, setLoggedInUser] = user;
   // const isAuthentic = true;
   let location = useLocation();
   if (loggedInuser.success) {

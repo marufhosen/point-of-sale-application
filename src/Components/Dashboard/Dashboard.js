@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMoneyBill,
@@ -8,9 +8,70 @@ import {
 import DashboartChart from "./DashboartChart";
 import SalesTable from "./SalesTable";
 import { userContext } from "../../App";
+import axios from "axios";
 
 const Dashboard = () => {
-  const [loggedInuser, setLoggedInUser] = useContext(userContext);
+  // const [loggedInuser, setLoggedInUser] = useContext(userContext);
+  const { user, products, customers } = useContext(userContext);
+  const [loggedInuser, setLoggedInUser] = user;
+  const [getProductFromDB, setGetProductFromDB] = products;
+  const [getCustomerFromDB, setGetCustomerFromDB] = customers;
+
+  //get Producy from api
+  useEffect(() => {
+    axios
+      .get(
+        "http://localhost:5000/product/getProducts?email=" + loggedInuser.email,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then(
+        (response) => {
+          setGetProductFromDB(response.data.result);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }, []);
+
+  //get customers from api
+  useEffect(() => {
+    axios
+      .get(
+        "http://localhost:5000/customer/getCustomers?email=" +
+          loggedInuser.email,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then(
+        (response) => {
+          setGetCustomerFromDB(response.data.result);
+          // setGetProductFromDB("hit dash",response.data.result);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }, []);
+
+  //calculate total product cost
+  let sum = 0;
+
+  for (let i = 0; i < getProductFromDB.length; i++) {
+    let price = parseInt(getProductFromDB[i].price);
+    sum = sum + price;
+  }
+
+  // console.log("hit dashboard", getCustomerFromDB);
   return (
     <div>
       <p>{loggedInuser.name}</p>
@@ -24,10 +85,10 @@ const Dashboard = () => {
             </div>
             <div className="flex-1 text-right md:text-center">
               <h2 className="font-bold uppercase text-gray-600">
-                Total Revenue
+                Total Product Cost
               </h2>
               <p className="font-bold text-3xl">
-                $3249{" "}
+                {sum}
                 <span className="text-green-500">
                   <i className="fas fa-caret-up"></i>
                 </span>
@@ -43,7 +104,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="flex-1 text-right md:text-center">
-              <h2 className="font-bold uppercase text-gray-600">Total Cost</h2>
+              <h2 className="font-bold uppercase text-gray-600">Sell Amount</h2>
               <p className="font-bold text-3xl">$ 249</p>
             </div>
           </div>
@@ -76,7 +137,7 @@ const Dashboard = () => {
                 Total customers
               </h2>
               <p className="font-bold text-3xl">
-                2{" "}
+                {getCustomerFromDB.length}
                 <span className="text-yellow-600">
                   <i className="fas fa-caret-up"></i>
                 </span>

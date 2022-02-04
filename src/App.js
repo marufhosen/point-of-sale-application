@@ -8,14 +8,22 @@ import Products from "./Components/Pages/Products/Products";
 import NavBar from "./Components/Layout/NavBar";
 import { createContext, useState } from "react";
 import Profile from "./Components/Pages/Profile/Profile";
-import AddProducts from "./Components/Pages/Products/AddProducts";
+import Customers from "./Components/Pages/Customers/Customers";
 
 export const userContext = createContext();
 
 function App() {
   const [loggedInuser, setLoggedInUser] = useState({});
+  const [getProductFromDB, setGetProductFromDB] = useState({});
+  const [getCustomerFromDB, setGetCustomerFromDB] = useState({});
   return (
-    <userContext.Provider value={[loggedInuser, setLoggedInUser]}>
+    <userContext.Provider
+      value={{
+        user: [loggedInuser, setLoggedInUser],
+        products: [getProductFromDB, setGetProductFromDB],
+        customers: [getCustomerFromDB, setGetCustomerFromDB],
+      }}
+    >
       <BrowserRouter>
         <NavBar />
         <Routes>
@@ -29,7 +37,7 @@ function App() {
                 <Dashboard />
               </PrivateRoute>
             }
-          ></Route>
+          />
           <Route
             path="/products"
             element={
@@ -37,7 +45,7 @@ function App() {
                 <Products />
               </PrivateRoute>
             }
-          ></Route>
+          />
           <Route
             path="/profile"
             element={
@@ -45,7 +53,15 @@ function App() {
                 <Profile />
               </PrivateRoute>
             }
-          ></Route>
+          />
+          <Route
+            path="/customers"
+            element={
+              <PrivateRoute>
+                <Customers />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </userContext.Provider>

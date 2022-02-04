@@ -2,7 +2,9 @@ import React, { useContext } from "react";
 import { userContext } from "../../../App";
 
 const Profile = () => {
-  const [loggedInuser, setLoggedInUser] = useContext(userContext);
+  // const [loggedInuser, setLoggedInUser] = useContext(userContext);
+  const { user } = useContext(userContext);
+  const [loggedInuser, setLoggedInUser] = user;
   return (
     <div>
       <div className="h-screen bg-white dark:bg-gray-700">
