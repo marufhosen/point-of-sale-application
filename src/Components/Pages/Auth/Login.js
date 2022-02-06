@@ -11,6 +11,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { userContext } from "../../../App";
+import Footer from "../../Layout/Footer";
 
 firebase.initializeApp(firebaseConfig);
 
@@ -96,7 +97,6 @@ const Login = () => {
             );
           }
           setLoggedInUser(authenticUser);
-          console.log("hit logged", loggedInuser);
           navigate(from, { replace: true });
         })
         .catch((error) => {
@@ -112,7 +112,7 @@ const Login = () => {
         <div className="w-5/6 mx-auto overflow-hidden dark:bg-gray-800 rounded-lg shadow-xl lg:max-w-md">
           <div className="w-full px-6 py-8 md:px-8">
             <h2 className="text-2xl font-semibold text-center text-gray-700 dark:text-white">
-              Video editor
+              Point of sale
             </h2>
 
             <p className="text-sm text-center text-gray-600 dark:text-gray-200">
@@ -227,6 +227,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

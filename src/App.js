@@ -9,19 +9,16 @@ import NavBar from "./Components/Layout/NavBar";
 import { createContext, useState } from "react";
 import Profile from "./Components/Pages/Profile/Profile";
 import Customers from "./Components/Pages/Customers/Customers";
+import Invoice from "./Components/Pages/Invoice/Invoice";
 
 export const userContext = createContext();
 
 function App() {
   const [loggedInuser, setLoggedInUser] = useState({});
-  const [getProductFromDB, setGetProductFromDB] = useState({});
-  const [getCustomerFromDB, setGetCustomerFromDB] = useState({});
   return (
     <userContext.Provider
       value={{
         user: [loggedInuser, setLoggedInUser],
-        products: [getProductFromDB, setGetProductFromDB],
-        customers: [getCustomerFromDB, setGetCustomerFromDB],
       }}
     >
       <BrowserRouter>
@@ -59,6 +56,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Customers />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/invoice"
+            element={
+              <PrivateRoute>
+                <Invoice />
               </PrivateRoute>
             }
           />

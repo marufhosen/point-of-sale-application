@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { userContext } from "../../../App";
+import Footer from "../../Layout/Footer";
 
 const Profile = () => {
   // const [loggedInuser, setLoggedInUser] = useContext(userContext);
@@ -7,53 +8,31 @@ const Profile = () => {
   const [loggedInuser, setLoggedInUser] = user;
   return (
     <div>
-      <div className="h-screen bg-white dark:bg-gray-700">
-        <div className="pt-10 flex justify-center items-center">
-          <div className="flex flex-col items-center w-96 bg-white rounded shadow-2xl overflow-hidden">
-            <div className="relative w-full">
-              <div className="pb-40%" />
-              <img
-                alt="cover"
-                src="https://images.unsplash.com/photo-1553095066-5014bc7b7f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8d2FsbCUyMGJhY2tncm91bmR8ZW58MHx8MHx8&w=1000&q=80"
-                className="absolute top-0 left-0 w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex flex-col items-center -mt-14">
-              <img
-                alt="Annonymous"
-                src="https://www.shareicon.net/data/512x512/2016/05/24/770137_man_512x512.png"
-                className="relative rounded-full w-40 h-40"
-              />
-              <div className="flex mt-5">
-                <h3 className="font-body font-bold text-lg">
-                  {loggedInuser.name}
-                </h3>
-                <h4 className="font-body text-lg ml-3">26</h4>
-              </div>
-              <h5 className="font-body mt-2">{loggedInuser.email}</h5>
-            </div>
-            <hr className="w-full mt-6" />
-            {/* <div className="flex justify-around w-full py-6 px-6">
-            <div className="flex w-20 flex-col items-center">
-              <h5 className="font-body font-bold text-lg">
-                80K
-              </h5>
-              <p className="font-body text-xs tracking-widest mt-1">
-                Followers
-              </p>
-            </div>
-            <div className="flex w-20 flex-col items-center">
-              <h5 className="font-body font-bold text-lg">803K</h5>
-              <p className="font-body text-xs tracking-widest mt-1">Likes</p>
-            </div>
-            <div className="flex w-20 flex-col items-center">
-              <h5 className="font-body font-bold text-lg">1.4K</h5>
-              <p className="font-body text-xs tracking-widest mt-1">Photos</p>
-            </div>
-          </div> */}
+      <div className="min-h-screen">
+        <div className="rounded-3xl overflow-hidden shadow-xl max-w-xs my-3 m-auto bg-blue-100">
+          <img
+            alt="img"
+            src="https://news.tradimo.com/wp-content/uploads/2019/11/technicalanalysis.jpg"
+            className="w-full"
+          />
+          <div className="flex justify-center -mt-8">
+            <img
+              alt="img"
+              src="https://www.w3schools.com/howto/img_avatar.png"
+              className="rounded-full border-solid w-28 h-28 border-white border-2 -mt-3"
+            />
+          </div>
+          <div className="text-center px-3 pb-6 pt-2">
+            <h3 className="text-gray-700 text-sm bold font-sans">
+              {loggedInuser.name}
+            </h3>
+            <p className="mt-2 font-sans font-light text-black">
+              Email: {loggedInuser.email}
+            </p>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

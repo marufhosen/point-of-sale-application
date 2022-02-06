@@ -9,20 +9,23 @@ import DashboartChart from "./DashboartChart";
 import SalesTable from "./SalesTable";
 import { userContext } from "../../App";
 import axios from "axios";
+import Footer from "../Layout/Footer";
 
 const Dashboard = () => {
   // const [loggedInuser, setLoggedInUser] = useContext(userContext);
-  const { user, products, customers } = useContext(userContext);
+  const { user } = useContext(userContext);
   const [loggedInuser, setLoggedInUser] = user;
-  const [getProductFromDB, setGetProductFromDB] = products;
-  const [getCustomerFromDB, setGetCustomerFromDB] = customers;
+  const [getProductFromDB, setGetProductFromDB] = useState({});
+  const [getCustomerFromDB, setGetCustomerFromDB] = useState({});
+  const [getInvoiceFromDB, setGetInvoiceFromDB] = useState({});
 
   //get Producy from api
   useEffect(() => {
     axios
       .get(
-        "http://localhost:5000/product/getProducts?email=" + loggedInuser.email,
+        "https://point-of-sale-319.herokuapp.com/product/getProducts?email=" + loggedInuser.email,
         {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -43,9 +46,10 @@ const Dashboard = () => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:5000/customer/getCustomers?email=" +
+        "https://point-of-sale-319.herokuapp.com/customer/getCustomers?email=" +
           loggedInuser.email,
         {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -63,18 +67,64 @@ const Dashboard = () => {
       );
   }, []);
 
-  //calculate total product cost
-  let sum = 0;
+  //get invoice from api
+  useEffect(() => {
+    axios
+      .get(
+        "https://point-of-sale-319.herokuapp.com/invoice/getInvoice?email=" + loggedInuser.email,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then(
+        (response) => {
+          setGetInvoiceFromDB(response.data.result);
+          // setGetProductFromDB("hit dash",response.data.result);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }, []);
 
+  // console.log("hit iv", getInvoiceFromDB);
+  //calculate total product cost
+  let sumOfProduct = 0;
   for (let i = 0; i < getProductFromDB.length; i++) {
+    let stock = parseInt(getProductFromDB[i].stock);
     let price = parseInt(getProductFromDB[i].price);
-    sum = sum + price;
+    sumOfProduct = sumOfProduct + price * stock;
+  }
+  // calculate total sell
+  let sumOfTotalSell = 0;
+  for (let i = 0; i < getInvoiceFromDB.length; i++) {
+    let price = parseInt(getInvoiceFromDB[i].totalPrice);
+    sumOfTotalSell = sumOfTotalSell + price;
+  }
+  //calculate total selling price with rev
+
+  let productOriginalPrice = 0;
+  for (let i = 0; i < getInvoiceFromDB.length; i++) {
+    let price = parseInt(getInvoiceFromDB[i].productPrice);
+    let quantity = parseInt(getInvoiceFromDB[i].productQuantity);
+    productOriginalPrice = productOriginalPrice + price * quantity;
+  }
+
+  // calculate Due Amount
+  let sumOfDue = 0;
+  for (let i = 0; i < getInvoiceFromDB.length; i++) {
+    let price = parseInt(getInvoiceFromDB[i].totalDue);
+    sumOfDue = sumOfDue + price;
   }
 
   // console.log("hit dashboard", getCustomerFromDB);
   return (
     <div>
-      <p>{loggedInuser.name}</p>
+      {/* <p>{loggedInuser.name}</p> */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-5">
         <div className="bg-gradient-to-b from-green-200 to-green-100 border-b-4 border-green-600 rounded-lg shadow-xl p-5">
           <div className="flex flex-row items-center">
@@ -88,7 +138,7 @@ const Dashboard = () => {
                 Total Product Cost
               </h2>
               <p className="font-bold text-3xl">
-                {sum}
+                {sumOfProduct} BDT
                 <span className="text-green-500">
                   <i className="fas fa-caret-up"></i>
                 </span>
@@ -105,7 +155,7 @@ const Dashboard = () => {
             </div>
             <div className="flex-1 text-right md:text-center">
               <h2 className="font-bold uppercase text-gray-600">Sell Amount</h2>
-              <p className="font-bold text-3xl">$ 249</p>
+              <p className="font-bold text-3xl">{sumOfTotalSell} BDT</p>
             </div>
           </div>
         </div>
@@ -120,8 +170,10 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="flex-1 text-right md:text-center">
-              <h2 className="font-bold uppercase text-gray-600">Total Due</h2>
-              <p className="font-bold text-3xl">152 days</p>
+              <h2 className="font-bold uppercase text-gray-600">Total Revenue</h2>
+              <p className="font-bold text-3xl">
+                {sumOfTotalSell - productOriginalPrice} BDT
+              </p>
             </div>
           </div>
         </div>
@@ -158,8 +210,9 @@ const Dashboard = () => {
       </div>
       <div className="p-5">
         <p className="text-center p-2 font-bold mb-5">Recent Sales</p>
-        <SalesTable />
+        {getInvoiceFromDB.length && <SalesTable invoices={getInvoiceFromDB} />}
       </div>
+      <Footer />
     </div>
   );
 };
