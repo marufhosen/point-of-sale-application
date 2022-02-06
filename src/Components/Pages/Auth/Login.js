@@ -184,6 +184,11 @@ const Login = () => {
                   required
                   onChange={handleOnChange}
                 />
+                {!newUser && (
+                  <span className="text-gray-500 text-sm">
+                    Demo Email: demo.example@gmail.com
+                  </span>
+                )}
               </div>
 
               <div className="mt-4">
@@ -200,6 +205,11 @@ const Login = () => {
                   required
                   onChange={handleOnChange}
                 />
+                {!newUser && (
+                  <span className="text-gray-500 text-sm">
+                    Demo Pass: 123456
+                  </span>
+                )}
               </div>
 
               <div className="mt-8">

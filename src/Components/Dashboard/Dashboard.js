@@ -209,7 +209,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="p-5">
-        <p className="text-center p-2 font-bold mb-5">Recent Sales</p>
+        <p className="text-center p-2 font-bold mb-5">Recent Invoices</p>
         {getInvoiceFromDB.length && <SalesTable invoices={getInvoiceFromDB} />}
       </div>
       <Footer />
