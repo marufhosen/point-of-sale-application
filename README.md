@@ -1,5 +1,4 @@
-# TrendHub - Simple E-com Site
-
+# POS - Point of sale application
 ### [Live Site](https://pos-app-319.web.app/)
 **Backend Repo:** [Point of Sale](https://github.com/marufhosen/point-of-sale-server)
 # Features
